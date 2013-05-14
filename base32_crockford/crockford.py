@@ -28,10 +28,10 @@ class Base32Crockford:
 
         return symbol_string + check_digit
 
-    def decode(self, symbol_string, checksum=False):
+    def decode(self, symbol_string, checksum=False, strict=False):
         """
         """
-        symbol_string = self.normalize(symbol_string)
+        symbol_string = self.normalize(symbol_string, strict=strict)
         if checksum:
             symbol_string, check_digit = symbol_string[:-1], symbol_string[-1]
 
@@ -47,10 +47,15 @@ class Base32Crockford:
 
         return number
 
-    def normalize(self, symbol_string):
+    def normalize(self, symbol_string, strict=False):
         """
         """
-        return symbol_string.translate(self.NORMALIZE_SYMBOLS, '-').upper()
+        string = symbol_string.translate(self.NORMALIZE_SYMBOLS, '-').upper()
+
+        if strict and string != symbol_string:
+            raise ValueError("Normalization required for string")
+
+        return string
 
 
 base32 = Base32Crockford()

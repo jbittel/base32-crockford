@@ -22,8 +22,15 @@ class Base32CrockfordTests(unittest.TestCase):
     def test_decode_bad_checksum(self):
         self.assertRaises(ValueError, base32.decode, '16JE', checksum=True)
 
+    def test_decode_strict(self):
+        self.assertRaises(ValueError, base32.decode, '16j', strict=True)
+
     def test_normalize(self):
         self.assertEqual(base32.normalize('ix-Lb-Ko'), '1X1BK0')
+
+    def test_normalize_strict(self):
+        self.assertRaises(ValueError, base32.normalize, 'ix-Lb-Ko', strict=True)
+
 
 if __name__ == '__main__':
     unittest.main()
