@@ -7,8 +7,8 @@ __all__ = ["base32"]
 class Base32Crockford:
     SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ*~$=U"
     ENCODE_SYMBOLS = {i: ch for (i, ch) in enumerate(SYMBOLS)}
-
-    NORMALIZE = string.maketrans("IiLlOo", "111100")
+    DECODE_SYMBOLS = {ch: i for (i, ch) in enumerate(SYMBOLS)}
+    NORMALIZE_SYMBOLS = string.maketrans("IiLlOo", "111100")
 
     def encode(self, number, checksum=False):
         """
@@ -31,12 +31,26 @@ class Base32Crockford:
     def decode(self, symbol_string, checksum=False):
         """
         """
-        pass
+        symbol_string = self.normalize(symbol_string)
+        if checksum:
+            symbol_string, check_digit = symbol_string[:-1], symbol_string[-1]
+
+        number = 0
+        for char in symbol_string:
+            number = number * 32 + self.DECODE_SYMBOLS[char]
+
+        if checksum:
+            check_value = self.DECODE_SYMBOLS[check_digit]
+            modulo = number % 37
+            if check_value != modulo:
+                raise ValueError("Invalid checksum digit")
+
+        return number
 
     def normalize(self, symbol_string):
         """
         """
-        return symbol_string.translate(self.NORMALIZE, '-').upper()
+        return symbol_string.translate(self.NORMALIZE_SYMBOLS, '-').upper()
 
 
 base32 = Base32Crockford()
