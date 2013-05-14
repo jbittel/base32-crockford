@@ -13,6 +13,9 @@ class Base32CrockfordTests(unittest.TestCase):
     def test_encode_checksum(self):
         self.assertEqual(base32.encode(1234, checksum=True), '16JD')
 
+    def test_encode_zero_checksum(self):
+        self.assertEqual(base32.encode(0, checksum=True), '00')
+
     def test_decode(self):
         self.assertEqual(base32.decode('16J'), 1234)
 

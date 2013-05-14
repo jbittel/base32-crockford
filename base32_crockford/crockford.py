@@ -17,12 +17,12 @@ class Base32Crockford:
         If checksum is set to True, a checksum digit will also be
         calculated and appended to the string.
         """
-        if number == 0:
-            return '0'
-
         check_digit = ''
         if checksum:
             check_digit = self.ENCODE_SYMBOLS[number % 37]
+
+        if number == 0:
+            return '0' + check_digit
 
         symbol_string = ''
         while number > 0:
