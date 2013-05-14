@@ -12,6 +12,10 @@ class Base32Crockford:
 
     def encode(self, number, checksum=False):
         """
+        Encodes a base 10 number into a symbol string.
+
+        If checksum is set to True, a checksum digit will also be
+        calculated and appended to the string.
         """
         if number == 0:
             return '0'
@@ -30,6 +34,14 @@ class Base32Crockford:
 
     def decode(self, symbol_string, checksum=False, strict=False):
         """
+        Decodes a given symbol string into a base 10 number.
+
+        If checksum is set to True, the string is assumed to have a
+        trailing checksum digit which will be validated. If the
+        checksum validation fails, a ValueError is raised.
+
+        If strict is set to True, a ValueError is raised if the
+        normalization step requires changes to the string.
         """
         symbol_string = self.normalize(symbol_string, strict=strict)
         if checksum:
@@ -49,6 +61,17 @@ class Base32Crockford:
 
     def normalize(self, symbol_string, strict=False):
         """
+        Normalizes a given symbol string to account for error
+        resistance and prepare it for decoding. These transformations
+        are applied:
+
+           1. Hyphens are removed
+           2. 'I' or 'i' are converted to '1'
+           3. 'O' or 'o' are converted to '0'
+           4. All characters are converted to uppercase
+
+        If the strict parameter is set to True, a ValueError is raised
+        if any of the above transformations are applied.
         """
         string = symbol_string.translate(self.NORMALIZE_SYMBOLS, '-').upper()
 
