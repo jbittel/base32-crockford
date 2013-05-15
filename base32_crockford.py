@@ -40,9 +40,14 @@ def encode(number, checksum=False):
     """
     Encodes a base 10 number into a symbol string.
 
+    Raises a ValueError on invalid input.
+
     If checksum is set to True, a check symbol will also be
     calculated and appended to the string.
     """
+    if number < 0:
+        raise ValueError("Number is not a positive integer")
+
     check_symbol = ''
     if checksum:
         check_symbol = ENCODE_SYMBOLS[number % 37]
@@ -63,6 +68,8 @@ def decode(symbol_string, checksum=False, strict=False):
     """
     Decodes a given symbol string into a base 10 number.
 
+    Raises a ValueError on invalid input.
+
     If checksum is set to True, the string is assumed to have a
     trailing check symbol which will be validated. If the
     checksum validation fails, a ValueError is raised.
@@ -74,6 +81,10 @@ def decode(symbol_string, checksum=False, strict=False):
     if checksum:
         symbol_string, check_symbol = symbol_string[:-1], symbol_string[-1]
 
+    # The letter 'U' is only valid as a check symbol
+    if 'U' in symbol_string:
+        raise ValueError("String contains invalid characters")
+
     number = 0
     for symbol in symbol_string:
         number = number * 32 + DECODE_SYMBOLS[symbol]
@@ -82,7 +93,7 @@ def decode(symbol_string, checksum=False, strict=False):
         check_value = DECODE_SYMBOLS[check_symbol]
         modulo = number % 37
         if check_value != modulo:
-            raise ValueError("Invalid check symbol")
+            raise ValueError("Invalid check symbol for string")
 
     return number
 

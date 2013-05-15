@@ -16,6 +16,9 @@ class Base32CrockfordTests(unittest.TestCase):
     def test_encode_zero_checksum(self):
         self.assertEqual(base32_crockford.encode(0, checksum=True), '00')
 
+    def test_encode_negative(self):
+        self.assertRaises(ValueError, base32_crockford.encode, -1)
+
     def test_decode(self):
         self.assertEqual(base32_crockford.decode('16J'), 1234)
 
@@ -27,6 +30,9 @@ class Base32CrockfordTests(unittest.TestCase):
 
     def test_decode_strict(self):
         self.assertRaises(ValueError, base32_crockford.decode, '16j', strict=True)
+
+    def test_decode_invalid(self):
+        self.assertRaises(ValueError, base32_crockford.decode, 'u')
 
     def test_normalize(self):
         self.assertEqual(base32_crockford.normalize('ix-Lb-Ko'), '1X1BK0')
