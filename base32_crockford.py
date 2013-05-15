@@ -75,8 +75,8 @@ def decode(symbol_string, checksum=False, strict=False):
         symbol_string, check_symbol = symbol_string[:-1], symbol_string[-1]
 
     number = 0
-    for char in symbol_string:
-        number = number * 32 + DECODE_SYMBOLS[char]
+    for symbol in symbol_string:
+        number = number * 32 + DECODE_SYMBOLS[symbol]
 
     if checksum:
         check_value = DECODE_SYMBOLS[check_symbol]
