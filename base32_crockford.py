@@ -43,13 +43,14 @@ CHECK_BASE = 37
 
 def encode(number, checksum=False):
     """
-    Encodes a base 10 number into a symbol string.
+    Encodes a base 10 positive integer into a symbol string.
 
     Raises a ValueError on invalid input.
 
     If checksum is set to True, a check symbol will also be
     calculated and appended to the string.
     """
+    number = int(number)
     if number < 0:
         raise ValueError("Number is not a positive integer")
 
@@ -63,7 +64,7 @@ def encode(number, checksum=False):
     symbol_string = ''
     while number > 0:
         remainder = number % BASE
-        number /= BASE
+        number //= BASE
         symbol_string = ENCODE_SYMBOLS[remainder] + symbol_string
 
     return symbol_string + check_symbol
