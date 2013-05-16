@@ -52,7 +52,7 @@ def encode(number, checksum=False):
     """
     number = int(number)
     if number < 0:
-        raise ValueError("Number is not a positive integer")
+        raise ValueError("Number '%d' is not a positive integer" % number)
 
     check_symbol = ''
     if checksum:
@@ -89,7 +89,8 @@ def decode(symbol_string, checksum=False, strict=False):
 
     # The letter 'U' is only valid as a check symbol
     if 'U' in symbol_string:
-        raise ValueError("String contains invalid characters")
+        raise ValueError("String '%s' contains invalid characters" %
+                         symbol_string)
 
     number = 0
     for symbol in symbol_string:
@@ -99,7 +100,8 @@ def decode(symbol_string, checksum=False, strict=False):
         check_value = DECODE_SYMBOLS[check_symbol]
         modulo = number % CHECK_BASE
         if check_value != modulo:
-            raise ValueError("Invalid check symbol for string")
+            raise ValueError("Invalid check symbol '%s' for string '%s'" %
+                             (check_symbol, symbol_string))
 
     return number
 
