@@ -30,10 +30,15 @@ import string
 __all__ = ["encode", "decode", "normalize"]
 
 
+# The encoded symbol space does not include I, L, O or U;
+# the last five symbols are exclusively for checksum values
 SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ*~$=U"
 ENCODE_SYMBOLS = {i: ch for (i, ch) in enumerate(SYMBOLS)}
 DECODE_SYMBOLS = {ch: i for (i, ch) in enumerate(SYMBOLS)}
 NORMALIZE_SYMBOLS = string.maketrans("IiLlOo", "111100")
+
+BASE = 32
+CHECK_BASE = 37
 
 
 def encode(number, checksum=False):
@@ -50,15 +55,15 @@ def encode(number, checksum=False):
 
     check_symbol = ''
     if checksum:
-        check_symbol = ENCODE_SYMBOLS[number % 37]
+        check_symbol = ENCODE_SYMBOLS[number % CHECK_BASE]
 
     if number == 0:
         return '0' + check_symbol
 
     symbol_string = ''
     while number > 0:
-        remainder = number % 32
-        number /= 32
+        remainder = number % BASE
+        number /= BASE
         symbol_string = ENCODE_SYMBOLS[remainder] + symbol_string
 
     return symbol_string + check_symbol
@@ -87,11 +92,11 @@ def decode(symbol_string, checksum=False, strict=False):
 
     number = 0
     for symbol in symbol_string:
-        number = number * 32 + DECODE_SYMBOLS[symbol]
+        number = number * BASE + DECODE_SYMBOLS[symbol]
 
     if checksum:
         check_value = DECODE_SYMBOLS[check_symbol]
-        modulo = number % 37
+        modulo = number % CHECK_BASE
         if check_value != modulo:
             raise ValueError("Invalid check symbol for string")
 
