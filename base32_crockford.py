@@ -120,7 +120,7 @@ def normalize(symbol_string, strict=False):
     If the strict parameter is set to True, a ValueError is raised
     if any of the above transformations are applied.
     """
-    string = symbol_string.translate(NORMALIZE_SYMBOLS, '-').upper()
+    string = str(symbol_string).translate(NORMALIZE_SYMBOLS, '-').upper()
 
     if strict and string != symbol_string:
         raise ValueError("Normalization required for string '%s'" %
