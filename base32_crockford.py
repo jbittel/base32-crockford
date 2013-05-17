@@ -123,6 +123,7 @@ def normalize(symbol_string, strict=False):
     string = symbol_string.translate(NORMALIZE_SYMBOLS, '-').upper()
 
     if strict and string != symbol_string:
-        raise ValueError("Normalization required for string")
+        raise ValueError("Normalization required for string '%s'" %
+                         symbol_string)
 
     return string
