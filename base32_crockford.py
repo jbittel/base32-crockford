@@ -112,6 +112,7 @@ def normalize(symbol_string, strict=False):
     resistance and prepare it for decoding. These transformations
     are applied:
 
+       0. Encoded as ASCII, if necessary
        1. Hyphens are removed
        2. 'I', 'i', 'L' or 'l' are converted to '1'
        3. 'O' or 'o' are converted to '0'
@@ -120,7 +121,18 @@ def normalize(symbol_string, strict=False):
     If the strict parameter is set to True, a ValueError is raised
     if any of the above transformations are applied.
     """
-    string = str(symbol_string).translate(NORMALIZE_SYMBOLS, '-').upper()
+    if isinstance(symbol_string, bytes):
+        pass
+    elif isinstance(symbol_string, unicode):
+        try:
+            symbol_string = symbol_string.encode('ascii')
+        except UnicodeEncodeError:
+            raise ValueError("String should only contain ASCII characters")
+    else:
+        raise TypeError("String should be bytes or ASCII, not %s" %
+                        symbol_string.__class__.__name__)
+    string = symbol_string.translate(NORMALIZE_SYMBOLS, '-').upper()
+
 
     if strict and string != symbol_string:
         raise ValueError("Normalization required for string '%s'" %
