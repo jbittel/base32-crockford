@@ -24,6 +24,7 @@ within the string.
 
 """
 
+import re
 import string
 
 
@@ -32,10 +33,13 @@ __all__ = ["encode", "decode", "normalize"]
 
 # The encoded symbol space does not include I, L, O or U;
 # the last five symbols are exclusively for checksum values
-SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ*~$=U"
-ENCODE_SYMBOLS = {i: ch for (i, ch) in enumerate(SYMBOLS)}
-DECODE_SYMBOLS = {ch: i for (i, ch) in enumerate(SYMBOLS)}
+SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+CHECK_SYMBOLS = "*~$=U"
+ENCODE_SYMBOLS = {i: ch for (i, ch) in enumerate(SYMBOLS + CHECK_SYMBOLS)}
+DECODE_SYMBOLS = {ch: i for (i, ch) in enumerate(SYMBOLS + CHECK_SYMBOLS)}
 NORMALIZE_SYMBOLS = string.maketrans("IiLlOo", "111100")
+INVALID_SYMBOLS = re.compile('^[^%s]+[^%s]?$' % (SYMBOLS,
+                                                 re.escape(CHECK_SYMBOLS)))
 
 BASE = 32
 CHECK_BASE = 37
@@ -87,11 +91,6 @@ def decode(symbol_string, checksum=False, strict=False):
     if checksum:
         symbol_string, check_symbol = symbol_string[:-1], symbol_string[-1]
 
-    # The letter 'U' is only valid as a check symbol
-    if 'U' in symbol_string:
-        raise ValueError("String '%s' contains invalid characters" %
-                         symbol_string)
-
     number = 0
     for symbol in symbol_string:
         number = number * BASE + DECODE_SYMBOLS[symbol]
@@ -133,6 +132,8 @@ def normalize(symbol_string, strict=False):
                         symbol_string.__class__.__name__)
     string = symbol_string.translate(NORMALIZE_SYMBOLS, '-').upper()
 
+    if INVALID_SYMBOLS.match(string):
+        raise ValueError("string '%s' contains invalid characters" % string)
 
     if strict and string != symbol_string:
         raise ValueError("Normalization required for string '%s'" %

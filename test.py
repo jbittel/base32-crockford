@@ -39,6 +39,7 @@ class Base32CrockfordTests(unittest.TestCase):
 
     def test_decode_invalid(self):
         self.assertRaises(ValueError, base32_crockford.decode, 'u')
+        self.assertRaises(ValueError, base32_crockford.decode, '!')
 
     def test_normalize(self):
         self.assertEqual(base32_crockford.normalize('ix-Lb-Ko'), '1X1BK0')
