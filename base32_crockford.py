@@ -31,10 +31,11 @@ import string
 __all__ = ["encode", "decode", "normalize"]
 
 
-# The encoded symbol space does not include I, L, O or U;
-# the last five symbols are exclusively for checksum values
+# The encoded symbol space does not include I, L, O or U
 SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+# The last five symbols are exclusively for checksum values
 CHECK_SYMBOLS = "*~$=U"
+
 ENCODE_SYMBOLS = {i: ch for (i, ch) in enumerate(SYMBOLS + CHECK_SYMBOLS)}
 DECODE_SYMBOLS = {ch: i for (i, ch) in enumerate(SYMBOLS + CHECK_SYMBOLS)}
 NORMALIZE_SYMBOLS = string.maketrans("IiLlOo", "111100")
@@ -56,7 +57,7 @@ def encode(number, checksum=False):
     """
     number = int(number)
     if number < 0:
-        raise ValueError("Number '%d' is not a positive integer" % number)
+        raise ValueError("number '%d' is not a positive integer" % number)
 
     check_symbol = ''
     if checksum:
@@ -78,8 +79,6 @@ def decode(symbol_string, checksum=False, strict=False):
     """
     Decodes a given symbol string into a base 10 number.
 
-    Raises a ValueError on invalid input.
-
     If checksum is set to True, the string is assumed to have a
     trailing check symbol which will be validated. If the
     checksum validation fails, a ValueError is raised.
@@ -99,7 +98,7 @@ def decode(symbol_string, checksum=False, strict=False):
         check_value = DECODE_SYMBOLS[check_symbol]
         modulo = number % CHECK_BASE
         if check_value != modulo:
-            raise ValueError("Invalid check symbol '%s' for string '%s'" %
+            raise ValueError("invalid check symbol '%s' for string '%s'" %
                              (check_symbol, symbol_string))
 
     return number
@@ -117,6 +116,10 @@ def normalize(symbol_string, strict=False):
        3. 'O' or 'o' are converted to '0'
        4. All characters are converted to uppercase
 
+    A TypeError is raised if an invalid type is provided.
+
+    A ValueError is raised on invalid input.
+
     If the strict parameter is set to True, a ValueError is raised
     if any of the above transformations are applied.
     """
@@ -126,9 +129,9 @@ def normalize(symbol_string, strict=False):
         try:
             symbol_string = symbol_string.encode('ascii')
         except UnicodeEncodeError:
-            raise ValueError("String should only contain ASCII characters")
+            raise ValueError("string should only contain ASCII characters")
     else:
-        raise TypeError("String should be bytes or ASCII, not %s" %
+        raise TypeError("string should be bytes or ASCII, not %s" %
                         symbol_string.__class__.__name__)
     string = symbol_string.translate(NORMALIZE_SYMBOLS, '-').upper()
 
@@ -136,7 +139,7 @@ def normalize(symbol_string, strict=False):
         raise ValueError("string '%s' contains invalid characters" % string)
 
     if strict and string != symbol_string:
-        raise ValueError("Normalization required for string '%s'" %
+        raise ValueError("normalization required for string '%s'" %
                          symbol_string)
 
     return string
