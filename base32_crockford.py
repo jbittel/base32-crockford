@@ -31,19 +31,22 @@ import string
 __all__ = ["encode", "decode", "normalize"]
 
 
+bytes_types = (bytes, bytearray)
+string_types = (str, unicode)
+
 # The encoded symbol space does not include I, L, O or U
-SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+symbols = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
 # The last five symbols are exclusively for checksum values
-CHECK_SYMBOLS = "*~$=U"
+check_symbols = '*~$=U'
 
-ENCODE_SYMBOLS = {i: ch for (i, ch) in enumerate(SYMBOLS + CHECK_SYMBOLS)}
-DECODE_SYMBOLS = {ch: i for (i, ch) in enumerate(SYMBOLS + CHECK_SYMBOLS)}
-NORMALIZE_SYMBOLS = string.maketrans("IiLlOo", "111100")
-INVALID_SYMBOLS = re.compile('^[^%s]+[^%s]?$' % (SYMBOLS,
-                                                 re.escape(CHECK_SYMBOLS)))
+encode_symbols = {i: ch for (i, ch) in enumerate(symbols + check_symbols)}
+decode_symbols = {ch: i for (i, ch) in enumerate(symbols + check_symbols)}
+normalize_symbols = string.maketrans('IiLlOo', '111100')
+invalid_symbols = re.compile('^[^%s]+[^%s]?$' % (symbols,
+                                                 re.escape(check_symbols)))
 
-BASE = 32
-CHECK_BASE = 37
+base = 32
+check_base = 37
 
 
 def encode(number, checksum=False):
@@ -61,16 +64,16 @@ def encode(number, checksum=False):
 
     check_symbol = ''
     if checksum:
-        check_symbol = ENCODE_SYMBOLS[number % CHECK_BASE]
+        check_symbol = encode_symbols[number % check_base]
 
     if number == 0:
         return '0' + check_symbol
 
     symbol_string = ''
     while number > 0:
-        remainder = number % BASE
-        number //= BASE
-        symbol_string = ENCODE_SYMBOLS[remainder] + symbol_string
+        remainder = number % base
+        number //= base
+        symbol_string = encode_symbols[remainder] + symbol_string
 
     return symbol_string + check_symbol
 
@@ -92,11 +95,11 @@ def decode(symbol_string, checksum=False, strict=False):
 
     number = 0
     for symbol in symbol_string:
-        number = number * BASE + DECODE_SYMBOLS[symbol]
+        number = number * base + decode_symbols[symbol]
 
     if checksum:
-        check_value = DECODE_SYMBOLS[check_symbol]
-        modulo = number % CHECK_BASE
+        check_value = decode_symbols[check_symbol]
+        modulo = number % check_base
         if check_value != modulo:
             raise ValueError("invalid check symbol '%s' for string '%s'" %
                              (check_symbol, symbol_string))
@@ -116,16 +119,17 @@ def normalize(symbol_string, strict=False):
        3. 'O' or 'o' are converted to '0'
        4. All characters are converted to uppercase
 
-    A TypeError is raised if an invalid type is provided.
+    A TypeError is raised if an invalid string type is provided.
 
-    A ValueError is raised on invalid input.
+    A ValueError is raised if the normalized string contains
+    invalid characters.
 
     If the strict parameter is set to True, a ValueError is raised
     if any of the above transformations are applied.
     """
-    if isinstance(symbol_string, bytes):
+    if isinstance(symbol_string, bytes_types):
         pass
-    elif isinstance(symbol_string, unicode):
+    elif isinstance(symbol_string, string_types):
         try:
             symbol_string = symbol_string.encode('ascii')
         except UnicodeEncodeError:
@@ -133,13 +137,12 @@ def normalize(symbol_string, strict=False):
     else:
         raise TypeError("string should be bytes or ASCII, not %s" %
                         symbol_string.__class__.__name__)
-    string = symbol_string.translate(NORMALIZE_SYMBOLS, '-').upper()
+    string = symbol_string.translate(normalize_symbols, '-').upper()
 
-    if INVALID_SYMBOLS.match(string):
+    if invalid_symbols.match(string):
         raise ValueError("string '%s' contains invalid characters" % string)
 
     if strict and string != symbol_string:
-        raise ValueError("normalization required for string '%s'" %
-                         symbol_string)
+        raise ValueError("string '%s' requires normalization" % symbol_string)
 
     return string
