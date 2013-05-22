@@ -50,13 +50,14 @@ check_base = 37
 
 
 def encode(number, checksum=False):
-    """
-    Encodes a base 10 positive integer into a symbol string.
+    """Encode a base 10 integer into a byte string.
 
-    Raises a ValueError on invalid input.
+    A ValueError is raised on invalid input.
 
-    If checksum is set to True, a check symbol will also be
+    If checksum is set to True, a check symbol will be
     calculated and appended to the string.
+
+    The encoded byte string is returned.
     """
     number = int(number)
     if number < 0:
@@ -79,8 +80,7 @@ def encode(number, checksum=False):
 
 
 def decode(symbol_string, checksum=False, strict=False):
-    """
-    Decodes a given symbol string into a base 10 number.
+    """Decode an encoded byte string into a base 10 number.
 
     If checksum is set to True, the string is assumed to have a
     trailing check symbol which will be validated. If the
@@ -88,6 +88,8 @@ def decode(symbol_string, checksum=False, strict=False):
 
     If strict is set to True, a ValueError is raised if the
     normalization step requires changes to the string.
+
+    The decoded number is returned.
     """
     symbol_string = normalize(symbol_string, strict=strict)
     if checksum:
@@ -108,10 +110,10 @@ def decode(symbol_string, checksum=False, strict=False):
 
 
 def normalize(symbol_string, strict=False):
-    """
-    Normalizes a given symbol string to account for error
-    resistance and prepare it for decoding. These transformations
-    are applied:
+    """Normalize an encoded byte string.
+
+    Normalization improves error resistance and prepares the
+    string for decoding. These transformations are applied:
 
        0. Encoded as ASCII, if necessary
        1. Hyphens are removed
@@ -126,6 +128,8 @@ def normalize(symbol_string, strict=False):
 
     If the strict parameter is set to True, a ValueError is raised
     if any of the above transformations are applied.
+
+    The normalized string is returned.
     """
     if isinstance(symbol_string, bytes_types):
         pass
