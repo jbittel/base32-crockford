@@ -13,14 +13,15 @@ According to his description, the encoding is designed to:
    * Be pronounceable
 
 It uses a symbol set of 10 digits and 22 letters, excluding I, L O and
-U. Decoding is not case sensitive, and 'i' and 'l' are converted to '1'
-and 'o' is converted to '0'. Encoding uses only upper-case characters.
+U. When decoding, the letters 'i' and 'l' are converted to '1' and 'o'
+is converted to '0'. Decoding is not case sensitive and encoding uses
+only upper-case characters.
 
-Hyphens can be present in symbol strings to improve readability, and
-are removed when decoding.
+Hyphens may be present anywhere in a symbol string to improve
+readability and are ignored when decoding.
 
-A check symbol can be appended to a symbol string to detect errors
-within the string.
+A check symbol may be appended to a symbol string for error detection
+when decoding the string.
 
 """
 
@@ -36,7 +37,7 @@ string_types = (str, unicode)
 
 # The encoded symbol space does not include I, L, O or U
 symbols = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
-# The last five symbols are exclusively for checksum values
+# These five symbols are exclusively for checksum values
 check_symbols = '*~$=U'
 
 encode_symbols = {i: ch for (i, ch) in enumerate(symbols + check_symbols)}
@@ -50,14 +51,14 @@ check_base = 37
 
 
 def encode(number, checksum=False):
-    """Encode a base 10 integer into a byte string.
+    """Encode an integer into a symbol string.
 
     A ValueError is raised on invalid input.
 
     If checksum is set to True, a check symbol will be
     calculated and appended to the string.
 
-    The encoded byte string is returned.
+    The encoded string is returned.
     """
     number = int(number)
     if number < 0:
@@ -80,7 +81,7 @@ def encode(number, checksum=False):
 
 
 def decode(symbol_string, checksum=False, strict=False):
-    """Decode an encoded byte string into a base 10 number.
+    """Decode an encoded symbol string.
 
     If checksum is set to True, the string is assumed to have a
     trailing check symbol which will be validated. If the
@@ -89,7 +90,7 @@ def decode(symbol_string, checksum=False, strict=False):
     If strict is set to True, a ValueError is raised if the
     normalization step requires changes to the string.
 
-    The decoded number is returned.
+    The decoded string is returned.
     """
     symbol_string = normalize(symbol_string, strict=strict)
     if checksum:
@@ -110,9 +111,9 @@ def decode(symbol_string, checksum=False, strict=False):
 
 
 def normalize(symbol_string, strict=False):
-    """Normalize an encoded byte string.
+    """Normalize an encoded symbol string.
 
-    Normalization improves error resistance and prepares the
+    Normalization provides error correction and prepares the
     string for decoding. These transformations are applied:
 
        0. Encoded as ASCII, if necessary
