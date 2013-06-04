@@ -52,6 +52,7 @@ class Base32CrockfordTests(unittest.TestCase):
         self.assertRaises(ValueError, base32_crockford.normalize, u'ä')
 
     def test_normalize_invalid_type(self):
+        self.assertRaises(TypeError, base32_crockford.normalize, 1234)
         self.assertRaises(TypeError, base32_crockford.normalize, ['16J'])
 
 if __name__ == '__main__':
