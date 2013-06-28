@@ -43,8 +43,8 @@ check_symbols = '*~$=U'
 encode_symbols = {i: ch for (i, ch) in enumerate(symbols + check_symbols)}
 decode_symbols = {ch: i for (i, ch) in enumerate(symbols + check_symbols)}
 normalize_symbols = string.maketrans('IiLlOo', '111100')
-invalid_symbols = re.compile('^[^%s]+[^%s]?$' % (symbols,
-                                                 re.escape(check_symbols)))
+valid_symbols = re.compile('^[%s]+[%s]?$' % (symbols,
+                                             re.escape(check_symbols)))
 
 base = 32
 check_base = 37
@@ -144,7 +144,7 @@ def normalize(symbol_string, strict=False):
                         symbol_string.__class__.__name__)
     string = symbol_string.translate(normalize_symbols, '-').upper()
 
-    if invalid_symbols.match(string):
+    if not valid_symbols.match(string):
         raise ValueError("string '%s' contains invalid characters" % string)
 
     if strict and string != symbol_string:
