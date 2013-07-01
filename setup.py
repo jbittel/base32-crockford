@@ -5,6 +5,10 @@ from distutils.core import setup
 import base32_crockford
 
 
+package_data = {
+    '': ['LICENSE', 'README.rst'],
+}
+
 setup(
     name='base32-crockford',
     version='0.1.0',
@@ -16,6 +20,7 @@ setup(
     url='https://github.com/jbittel/base32-crockford',
     download_url='https://github.com/jbittel/base32-crockford/downloads',
     py_modules=['base32_crockford'],
+    package_data=package_data,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
