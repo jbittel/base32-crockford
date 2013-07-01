@@ -17,7 +17,7 @@ setup(
     download_url='https://github.com/jbittel/base32-crockford/downloads',
     py_modules=['base32_crockford'],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
