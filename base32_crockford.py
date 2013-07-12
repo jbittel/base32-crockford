@@ -46,8 +46,8 @@ normalize_symbols = string.maketrans('IiLlOo', '111100')
 valid_symbols = re.compile('^[%s]+[%s]?$' % (symbols,
                                              re.escape(check_symbols)))
 
-base = 32
-check_base = 37
+base = len(symbols)
+check_base = len(symbols + check_symbols)
 
 
 def encode(number, checksum=False):
