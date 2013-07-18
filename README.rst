@@ -4,7 +4,7 @@ base32-crockford
 A Python module implementing the alternate base32 encoding as described
 by Douglas Crockford at: http://www.crockford.com/wrmg/base32.html.
 
-According to his description, the encoding is designed to:
+He designed the encoding to:
 
    * Be human and machine readable
    * Be compact
@@ -15,7 +15,7 @@ It uses a symbol set of 10 digits and 22 letters, excluding I, L O and
 U. Decoding is not case sensitive, and 'i' and 'l' are converted to '1'
 and 'o' is converted to '0'. Encoding uses only upper-case characters.
 
-Hyphens can be present in symbol strings to improve readability, and
+Hyphens may be present in symbol strings to improve readability, and
 are removed when decoding.
 
 A check symbol can be appended to a symbol string to detect errors
@@ -91,6 +91,8 @@ Normalize an encoded symbol string by applying these transformations:
 
 Ordinarily this function is automatically used when decoding, but
 can be utilized independently to clean or validate a symbol string.
+Invalid characters within the normalized string causes a
+``ValueError`` to be raised.
 
 When ``True``, optional ``strict`` causes a ``ValueError`` to be
 raised if the symbol string requires normalization.

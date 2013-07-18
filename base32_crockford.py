@@ -5,7 +5,7 @@ base32-crockford
 A Python module implementing the alternate base32 encoding as described
 by Douglas Crockford at: http://www.crockford.com/wrmg/base32.html.
 
-According to his description, the encoding is designed to:
+He designed the encoding to:
 
    * Be human and machine readable
    * Be compact
@@ -13,15 +13,14 @@ According to his description, the encoding is designed to:
    * Be pronounceable
 
 It uses a symbol set of 10 digits and 22 letters, excluding I, L O and
-U. When decoding, the letters 'i' and 'l' are converted to '1' and 'o'
-is converted to '0'. Decoding is not case sensitive and encoding uses
-only upper-case characters.
+U. Decoding is not case sensitive, and 'i' and 'l' are converted to '1'
+and 'o' is converted to '0'. Encoding uses only upper-case characters.
 
-Hyphens may be present anywhere in a symbol string to improve
-readability and are ignored when decoding.
+Hyphens may be present in symbol strings to improve readability, and
+are removed when decoding.
 
-A check symbol may be appended to a symbol string for error detection
-when decoding the string.
+A check symbol can be appended to a symbol string to detect errors
+within the string.
 
 """
 
