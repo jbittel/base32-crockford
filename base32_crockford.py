@@ -49,13 +49,16 @@ base = len(symbols)
 check_base = len(symbols + check_symbols)
 
 
-def encode(number, checksum=False):
+def encode(number, checksum=False, split=0):
     """Encode an integer into a symbol string.
 
     A ValueError is raised on invalid input.
 
     If checksum is set to True, a check symbol will be
     calculated and appended to the string.
+
+    If split is specified, the string will be divided into
+    clusters of that size separated by hyphens.
 
     The encoded string is returned.
     """
@@ -75,8 +78,15 @@ def encode(number, checksum=False):
         remainder = number % base
         number //= base
         symbol_string = encode_symbols[remainder] + symbol_string
+    symbol_string = symbol_string + check_symbol
 
-    return symbol_string + check_symbol
+    if split:
+        chunks = []
+        for pos in xrange(0, len(symbol_string), split):
+            chunks.append(symbol_string[pos:pos + split])
+        symbol_string = '-'.join(chunks)
+
+    return symbol_string
 
 
 def decode(symbol_string, checksum=False, strict=False):

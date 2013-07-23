@@ -23,6 +23,10 @@ class Base32CrockfordTests(unittest.TestCase):
     def test_encode_float(self):
         self.assertEqual(base32_crockford.encode(4.2), '4')
 
+    def test_encode_split(self):
+        self.assertEqual(base32_crockford.encode(123456, split=2), '3R-J0')
+        self.assertEqual(base32_crockford.encode(123456, split=3), '3RJ-0')
+
     def test_decode(self):
         self.assertEqual(base32_crockford.decode('16J'), 1234)
 

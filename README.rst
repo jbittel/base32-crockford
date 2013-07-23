@@ -50,13 +50,16 @@ Encode
 
 ::
 
-   base32_crockford.encode(n[, checksum=False])
+   base32_crockford.encode(n[, checksum=False[, split=0]])
 
 Encode an integer into a symbol string.
 
 When ``True``, optional ``checksum`` causes a check symbol to be
 calculated and appended to the string. This can help detect errors
 when decoding.
+
+When specified, optional ``split`` causes the output string to be
+divided into clusters of that size separated by hyphens.
 
 Decode
 ~~~~~~
