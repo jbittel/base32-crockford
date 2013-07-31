@@ -66,6 +66,10 @@ def encode(number, checksum=False, split=0):
     if number < 0:
         raise ValueError("number '%d' is not a positive integer" % number)
 
+    split = int(split)
+    if split < 0:
+        raise ValueError("split '%d' is not a positive integer" % split)
+
     check_symbol = ''
     if checksum:
         check_symbol = encode_symbols[number % check_base]
