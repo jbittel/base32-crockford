@@ -103,6 +103,10 @@ raised if the symbol string requires normalization.
 Changelog
 ---------
 
+Version 0.2.0
+
+   * Add optional split parameter when encoding
+
 Version 0.1.0
 
    * Initial release
