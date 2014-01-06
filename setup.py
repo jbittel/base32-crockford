@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 import base32_crockford
 
@@ -12,7 +15,8 @@ package_data = {
 setup(
     name='base32-crockford',
     version='0.1.0',
-    description="A Python implementation of Douglas Crockford's base32 encoding",
+    description=("A Python implementation of Douglas Crockford's "
+                 "base32 encoding scheme"),
     long_description=base32_crockford.__doc__,
     license='BSD',
     author='Jason Bittel',
