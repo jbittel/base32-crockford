@@ -14,7 +14,7 @@ package_data = {
 
 setup(
     name='base32-crockford',
-    version='0.1.0',
+    version='0.2.0',
     description=("A Python implementation of Douglas Crockford's "
                  "base32 encoding scheme"),
     long_description=base32_crockford.__doc__,
