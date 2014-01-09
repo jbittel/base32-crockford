@@ -6,8 +6,7 @@ import unittest
 import base32_crockford as b32
 
 
-class Base32CrockfordTests(unittest.TestCase):
-
+class EncodeTests(unittest.TestCase):
     def test_encode(self):
         self.assertEqual(b32.encode(1234), '16J')
 
@@ -27,6 +26,8 @@ class Base32CrockfordTests(unittest.TestCase):
         self.assertEqual(b32.encode(123456, split=2), '3R-J0')
         self.assertEqual(b32.encode(123456, split=3), '3RJ-0')
 
+
+class DecodeTests(unittest.TestCase):
     def test_decode(self):
         self.assertEqual(b32.decode('16J'), 1234)
 
@@ -47,6 +48,8 @@ class Base32CrockfordTests(unittest.TestCase):
         self.assertRaises(ValueError, b32.decode, 'u')
         self.assertRaises(ValueError, b32.decode, '!')
 
+
+class NormalizeTests(unittest.TestCase):
     def test_normalize(self):
         self.assertEqual(b32.normalize('ix-Lb-Ko'), '1X1BK0')
 
