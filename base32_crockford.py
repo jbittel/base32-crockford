@@ -39,8 +39,8 @@ symbols = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
 # These five symbols are exclusively for checksum values
 check_symbols = '*~$=U'
 
-encode_symbols = {i: ch for (i, ch) in enumerate(symbols + check_symbols)}
-decode_symbols = {ch: i for (i, ch) in enumerate(symbols + check_symbols)}
+encode_symbols = dict((i, ch) for (i, ch) in enumerate(symbols + check_symbols))
+decode_symbols = dict((ch, i) for (i, ch) in enumerate(symbols + check_symbols))
 normalize_symbols = string.maketrans('IiLlOo', '111100')
 valid_symbols = re.compile('^[%s]+[%s]?$' % (symbols,
                                              re.escape(check_symbols)))
