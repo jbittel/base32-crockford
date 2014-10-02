@@ -22,7 +22,7 @@ setup(
     author='Jason Bittel',
     author_email='jason.bittel@gmail.com',
     url='https://github.com/jbittel/base32-crockford',
-    download_url='https://github.com/jbittel/base32-crockford/downloads',
+    download_url='https://pypi.python.org/pypi/base32-crockford/',
     py_modules=['base32_crockford'],
     package_data=package_data,
     classifiers=[
