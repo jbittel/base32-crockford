@@ -1,16 +1,10 @@
 #!/usr/bin/env python
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import find_packages
+from setuptools import setup
 
 import base32_crockford
 
-
-package_data = {
-    '': ['LICENSE', 'README.rst'],
-}
 
 setup(
     name='base32-crockford',
@@ -23,8 +17,8 @@ setup(
     author_email='jason.bittel@gmail.com',
     url='https://github.com/jbittel/base32-crockford',
     download_url='https://pypi.python.org/pypi/base32-crockford/',
-    py_modules=['base32_crockford'],
-    package_data=package_data,
+    packages=find_packages(),
+    include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
