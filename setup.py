@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from setuptools import find_packages
 from setuptools import setup
 
 import base32_crockford
@@ -17,7 +16,7 @@ setup(
     author_email='jason.bittel@gmail.com',
     url='https://github.com/jbittel/base32-crockford',
     download_url='https://pypi.python.org/pypi/base32-crockford/',
-    packages=find_packages(),
+    py_modules=['base32_crockford'],
     include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
