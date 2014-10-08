@@ -25,14 +25,21 @@ within the string.
 """
 
 import re
-import string
+import sys
+
+PY3 = sys.version_info[0] == 3
+
+if not PY3:
+    import string as str
 
 
 __all__ = ["encode", "decode", "normalize"]
 
 
-bytes_types = (bytes, bytearray)
-string_types = (str, unicode)
+if PY3:
+    string_types = str,
+else:
+    string_types = basestring,
 
 # The encoded symbol space does not include I, L, O or U
 symbols = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
@@ -41,7 +48,7 @@ check_symbols = '*~$=U'
 
 encode_symbols = dict((i, ch) for (i, ch) in enumerate(symbols + check_symbols))
 decode_symbols = dict((ch, i) for (i, ch) in enumerate(symbols + check_symbols))
-normalize_symbols = string.maketrans('IiLlOo', '111100')
+normalize_symbols = str.maketrans('IiLlOo', '111100')
 valid_symbols = re.compile('^[%s]+[%s]?$' % (symbols,
                                              re.escape(check_symbols)))
 
@@ -86,7 +93,7 @@ def encode(number, checksum=False, split=0):
 
     if split:
         chunks = []
-        for pos in xrange(0, len(symbol_string), split):
+        for pos in range(0, len(symbol_string), split):
             chunks.append(symbol_string[pos:pos + split])
         symbol_string = '-'.join(chunks)
 
@@ -145,22 +152,22 @@ def normalize(symbol_string, strict=False):
 
     The normalized string is returned.
     """
-    if isinstance(symbol_string, bytes_types):
-        pass
-    elif isinstance(symbol_string, string_types):
-        try:
-            symbol_string = symbol_string.encode('ascii')
-        except UnicodeEncodeError:
-            raise ValueError("string should only contain ASCII characters")
+    if isinstance(symbol_string, string_types):
+        if not PY3:
+            try:
+                symbol_string = symbol_string.encode('ascii')
+            except UnicodeEncodeError:
+                raise ValueError("string should only contain ASCII characters")
     else:
-        raise TypeError("string should be bytes or ASCII, not %s" %
+        raise TypeError("string is of invalid type %s" %
                         symbol_string.__class__.__name__)
-    string = symbol_string.translate(normalize_symbols, '-').upper()
 
-    if not valid_symbols.match(string):
-        raise ValueError("string '%s' contains invalid characters" % string)
+    norm_string = symbol_string.translate(normalize_symbols).replace('-', '').upper()
 
-    if strict and string != symbol_string:
+    if not valid_symbols.match(norm_string):
+        raise ValueError("string '%s' contains invalid characters" % norm_string)
+
+    if strict and norm_string != symbol_string:
         raise ValueError("string '%s' requires normalization" % symbol_string)
 
-    return string
+    return norm_string
