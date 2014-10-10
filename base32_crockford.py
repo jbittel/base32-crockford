@@ -136,7 +136,6 @@ def normalize(symbol_string, strict=False):
     Normalization provides error correction and prepares the
     string for decoding. These transformations are applied:
 
-       0. Encoded as ASCII, if necessary
        1. Hyphens are removed
        2. 'I', 'i', 'L' or 'l' are converted to '1'
        3. 'O' or 'o' are converted to '0'
@@ -162,7 +161,7 @@ def normalize(symbol_string, strict=False):
         raise TypeError("string is of invalid type %s" %
                         symbol_string.__class__.__name__)
 
-    norm_string = symbol_string.translate(normalize_symbols).replace('-', '').upper()
+    norm_string = symbol_string.replace('-', '').translate(normalize_symbols).upper()
 
     if not valid_symbols.match(norm_string):
         raise ValueError("string '%s' contains invalid characters" % norm_string)

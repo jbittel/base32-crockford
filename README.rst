@@ -88,9 +88,9 @@ Normalize
 Normalize an encoded symbol string by applying these transformations:
 
    #. Remove hyphens
-   #. Convert all characters to uppercase
    #. Replace 'I' and 'L' with '1'
    #. Replace 'O' with '0'
+   #. Convert all characters to uppercase
 
 Ordinarily this function is automatically used when decoding, but
 can be utilized independently to clean or validate a symbol string.
