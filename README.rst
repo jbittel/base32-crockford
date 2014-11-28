@@ -103,6 +103,11 @@ raised if the symbol string requires normalization.
 Changelog
 ---------
 
+Version 0.3.0
+
+   * Add Python 2.6 support
+   * Add Python 3.3 and 3.4 support
+
 Version 0.2.0
 
    * Add optional split parameter when encoding
