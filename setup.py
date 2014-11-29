@@ -7,7 +7,7 @@ import base32_crockford
 
 setup(
     name='base32-crockford',
-    version='0.2.0',
+    version='0.3.0',
     description=("A Python implementation of Douglas Crockford's "
                  "base32 encoding scheme"),
     long_description=base32_crockford.__doc__,
